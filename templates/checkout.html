@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison Vault — Payment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="/">Maison <em>Vault</em></a>
+    <nav>
+      <a href="/">Collection</a>
+      <a href="/cart">Cart <span class="cart-count" id="cartCount">{{ cart_count }}</span></a>
+      <a href="/admin">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">Payment</h1>
+    <p class="page-sub">Every purchase is screened by our fraud engine before confirmation.</p>
+
+    <div class="banner" id="resultBanner" role="alert"></div>
+
+    <div class="checkout-grid">
+      <section>
+        <div class="field">
+          <label for="name">Name on card</label>
+          <input id="name" type="text" placeholder="A. Cartwright">
+        </div>
+        <div class="field">
+          <label for="card">Card number (demo — not processed)</label>
+          <input id="card" type="text" placeholder="4242 4242 4242 4242" inputmode="numeric">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="expiry">Expiry</label>
+            <input id="expiry" type="text" placeholder="MM / YY">
+          </div>
+          <div class="field">
+            <label for="cvv">CVV</label>
+            <input id="cvv" type="password" placeholder="•••" maxlength="4">
+          </div>
+        </div>
+        <div class="field">
+          <label for="country">Billing country (buyer)</label>
+          <select id="country">
+            {% for c in countries %}
+            <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <details class="demo">
+          <summary>Demo controls — test the fraud rules</summary>
+          <div class="field">
+            <label for="overrideHour">Override purchase hour (0–23, e.g. 3 to trigger the night rule; leave blank for real time)</label>
+            <input id="overrideHour" type="number" min="0" max="23" placeholder="—">
+          </div>
+        </details>
+
+        <button class="btn solid block" id="completeBtn" onclick="completePurchase()">Complete purchase</button>
+      </section>
+
+      <aside class="summary">
+        <h2>Order summary</h2>
+        {% for i in items %}
+        <div class="line"><span>{{ i.name }} × {{ i.qty }} ({{ i.seller_country }})</span><span>${{ "%.2f"|format(i.line_total) }}</span></div>
+        {% endfor %}
+        <div class="line grand"><span>Total</span><span>${{ "%.2f"|format(total) }}</span></div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    async function completePurchase() {
+      const btn = document.getElementById("completeBtn");
+      const banner = document.getElementById("resultBanner");
+      btn.disabled = true;
+      btn.textContent = "Screening…";
+
+      const payload = {
+        name: document.getElementById("name").value,
+        country: document.getElementById("country").value,
+        override_hour: document.getElementById("overrideHour").value
+      };
+
+      try {
+        const res = await fetch("/api/complete-purchase", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        banner.className = "banner show " + data.status;
+        if (data.status === "success") {
+          banner.innerHTML = `Payment confirmed — order <strong>#${data.order_id}</strong> is on its way. Thank you.`;
+          document.getElementById("cartCount").textContent = "0";
+        } else {
+          banner.innerHTML =
+            `Transaction <strong>#${data.order_id || ""}</strong> was declined by fraud screening:` +
+            `<ul>${data.reasons.map(r => `<li>${r}</li>`).join("")}</ul>` +
+            `This attempt has been logged for admin review.`;
+        }
+      } catch (err) {
+        banner.className = "banner show failure";
+        banner.textContent = "Could not reach the server. Check that the app is running and try again.";
+      }
+
+      banner.scrollIntoView({ behavior: "smooth", block: "start" });
+      btn.disabled = false;
+      btn.textContent = "Complete purchase";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison Vault — Admin · Blocked Transactions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="/">Maison <em>Vault</em></a>
+    <nav>
+      <a href="/">Collection</a>
+      <a href="/cart">Cart</a>
+      <a href="/admin" class="active">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">Blocked Transactions</h1>
+    <p class="page-sub">{{ blocked|length }} blocked · {{ completed_count }} completed successfully. Newest first.</p>
+
+    {% if blocked %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Time</th><th>Buyer</th><th>Route</th><th>Amount</th><th>Items</th><th>Fraud reasons</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in blocked %}
+        <tr>
+          <td><span class="badge">#{{ t.id }}</span></td>
+          <td>{{ t.time }}</td>
+          <td>{{ t.buyer }}</td>
+          <td>{{ t.seller_countries|join(", ") }} → {{ t.buyer_country }}</td>
+          <td>${{ "%.2f"|format(t.amount) }}</td>
+          <td>
+            {% for i in t["items"] %}{{ i.name }} × {{ i.qty }}{% if not loop.last %}, {% endif %}{% endfor %}
+          </td>
+          <td>
+            <ul class="reasons">
+              {% for r in t.reasons %}<li>{{ r }}</li>{% endfor %}
+            </ul>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty">No blocked transactions yet. Trigger one from the payment page — try an order over $2,000 or a buyer country different from the seller's.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
