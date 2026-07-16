@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison Vault — Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="/">Maison <em>Vault</em></a>
+    <nav>
+      <a href="/" class="active">Collection</a>
+      <a href="/cart">Cart <span class="cart-count" id="cartCount">{{ cart_count }}</span></a>
+      <a href="/admin">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">The Collection</h1>
+    <p class="page-sub">Each piece ships from its atelier of origin — noted on the tag.</p>
+
+    <div class="grid">
+      {% for p in products %}
+      <article class="card">
+        <img src="{{ url_for('static', filename='images/' + p.image) }}"
+         alt="{{ p.name }}"
+         class="product-image">
+        <h3>{{ p.name }}</h3>
+        <p class="meta">{{ p.meta }}</p>
+        <div class="row">
+          <span class="price">${{ "%.2f"|format(p.price) }}</span>
+          <span class="seller-tag">Ships from {{ p.seller_country }}</span>
+        </div>
+        <button class="btn" onclick="addToCart({{ p.id }}, this)">Add to cart</button>
+      </article>
+      {% endfor %}
+    </div>
+  </main>
+
+  <script>
+    async function addToCart(productId, btn) {
+      btn.disabled = true;
+      const res = await fetch("/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product_id: productId })
+      });
+      const data = await res.json();
+      document.getElementById("cartCount").textContent = data.cart_count;
+      btn.textContent = "Added ✓";
+      setTimeout(() => { btn.textContent = "Add to cart"; btn.disabled = false; }, 900);
+    }
+  </script>
+</body>
+</html>

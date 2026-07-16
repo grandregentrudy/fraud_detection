@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison Vault — Your Cart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="/">Maison <em>Vault</em></a>
+    <nav>
+      <a href="/">Collection</a>
+      <a href="/cart" class="active">Cart <span class="cart-count" id="cartCount">{{ cart_count }}</span></a>
+      <a href="/admin">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">Your Cart</h1>
+    <p class="page-sub">Review your selection before proceeding to payment.</p>
+
+    <div id="cartArea">
+      {% if items %}
+      <table class="cart-table" id="cartTable">
+        <thead>
+          <tr><th>Piece</th><th>Ships from</th><th>Price</th><th>Qty</th><th>Line total</th></tr>
+        </thead>
+        <tbody>
+          {% for i in items %}
+          <tr data-id="{{ i.id }}">
+            <td class="name">{{ i.name }}</td>
+            <td>{{ i.seller_country }}</td>
+            <td>${{ "%.2f"|format(i.price) }}</td>
+            <td>
+              <span class="qty-controls">
+                <button onclick="updateQty({{ i.id }}, {{ i.qty }} - 1)" aria-label="Decrease quantity">−</button>
+                <span>{{ i.qty }}</span>
+                <button onclick="updateQty({{ i.id }}, {{ i.qty }} + 1)" aria-label="Increase quantity">+</button>
+              </span>
+            </td>
+            <td class="line">${{ "%.2f"|format(i.line_total) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="totals">
+        <span class="label">Total</span>
+        <span class="value" id="grandTotal">${{ "%.2f"|format(total) }}</span>
+      </div>
+
+      <a href="/checkout"><button class="btn solid block">Proceed to payment</button></a>
+      {% else %}
+      <p class="empty">Your cart is empty — the vault awaits. <a href="/" style="color: var(--champagne-soft);">Browse the collection</a>.</p>
+      {% endif %}
+    </div>
+  </main>
+
+  <script>
+    async function updateQty(productId, qty) {
+      const res = await fetch("/api/cart/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product_id: productId, qty })
+      });
+      await res.json();
+      location.reload(); // simplest way to re-render totals server-side
+    }
+  </script>
+</body>
+</html>

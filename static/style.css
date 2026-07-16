@@ -1,0 +1,259 @@
+/* Maison Vault — shared stylesheet
+   Palette: ink #17141C · case #221D2B · champagne #C8A24E · porcelain #F2EDE4 */
+
+:root {
+  --ink: #17141c;
+  --case: #221d2b;
+  --case-edge: #342d42;
+  --champagne: #c8a24e;
+  --champagne-soft: #e3c988;
+  --porcelain: #f2ede4;
+  --muted: #968ea6;
+  --danger: #d0655c;
+  --success: #6fae87;
+  --radius: 4px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--ink);
+  color: var(--porcelain);
+  font-family: "Jost", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- header ---------- */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 4vw;
+  border-bottom: 1px solid var(--case-edge);
+}
+
+.brand {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.brand em { color: var(--champagne); font-style: normal; }
+
+nav { display: flex; gap: 2rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.14em; }
+nav a { color: var(--muted); transition: color 0.2s; }
+nav a:hover, nav a.active { color: var(--champagne-soft); }
+nav a:focus-visible { outline: 1px solid var(--champagne); outline-offset: 4px; }
+
+.cart-count {
+  display: inline-block;
+  min-width: 1.3em;
+  text-align: center;
+  background: var(--champagne);
+  color: var(--ink);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  padding: 0.1em 0.35em;
+  margin-left: 0.3em;
+  font-weight: 500;
+}
+
+/* ---------- layout ---------- */
+main { max-width: 1100px; margin: 0 auto; padding: 3rem 4vw 5rem; }
+
+.page-title {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+.page-sub { color: var(--muted); margin-bottom: 2.6rem; font-size: 0.95rem; }
+
+/* ---------- product grid ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.6rem;
+}
+
+.card {
+  background: var(--case);
+  border: 1px solid var(--case-edge);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.card:hover { border-color: var(--champagne); transform: translateY(-3px); }
+
+/* the "display case": gold hairline frame with the piece's monogram */
+.case-frame {
+  border: 1px solid var(--champagne);
+  outline: 1px solid var(--case-edge);
+  outline-offset: 5px;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3rem;
+  color: var(--champagne-soft);
+}
+
+.card h3 { font-family: "Cormorant Garamond", serif; font-size: 1.35rem; font-weight: 500; }
+.card .meta { color: var(--muted); font-size: 0.83rem; }
+.card .row { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.price { color: var(--champagne-soft); font-size: 1.05rem; }
+.seller-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  border: 1px solid var(--case-edge);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  font-family: "Jost", sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--champagne);
+  background: transparent;
+  color: var(--champagne-soft);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn:hover { background: var(--champagne); color: var(--ink); }
+.btn:focus-visible { outline: 1px solid var(--porcelain); outline-offset: 3px; }
+.btn.solid { background: var(--champagne); color: var(--ink); font-weight: 500; }
+.btn.solid:hover { background: var(--champagne-soft); }
+.btn.block { width: 100%; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- cart table ---------- */
+.cart-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+.cart-table th {
+  text-align: left;
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.8rem 0.6rem;
+  border-bottom: 1px solid var(--case-edge);
+}
+.cart-table td { padding: 1rem 0.6rem; border-bottom: 1px solid var(--case-edge); }
+.cart-table .name { font-family: "Cormorant Garamond", serif; font-size: 1.15rem; }
+
+.qty-controls { display: inline-flex; align-items: center; gap: 0.7rem; }
+.qty-controls button {
+  width: 1.8rem; height: 1.8rem;
+  background: none;
+  border: 1px solid var(--case-edge);
+  border-radius: var(--radius);
+  color: var(--porcelain);
+  cursor: pointer;
+}
+.qty-controls button:hover { border-color: var(--champagne); }
+
+.totals { display: flex; justify-content: flex-end; align-items: baseline; gap: 1.2rem; margin-bottom: 2rem; }
+.totals .label { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.totals .value { font-family: "Cormorant Garamond", serif; font-size: 2rem; color: var(--champagne-soft); }
+
+.empty { color: var(--muted); padding: 3rem 0; text-align: center; }
+
+/* ---------- checkout ---------- */
+.checkout-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; }
+@media (max-width: 760px) { .checkout-grid { grid-template-columns: 1fr; } }
+
+.field { margin-bottom: 1.2rem; }
+.field label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.field input, .field select {
+  width: 100%;
+  background: var(--case);
+  border: 1px solid var(--case-edge);
+  border-radius: var(--radius);
+  color: var(--porcelain);
+  font-family: "Jost", sans-serif;
+  font-size: 0.95rem;
+  padding: 0.7rem 0.9rem;
+}
+.field input:focus, .field select:focus { outline: none; border-color: var(--champagne); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.summary {
+  background: var(--case);
+  border: 1px solid var(--case-edge);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+  height: fit-content;
+}
+.summary h2 { font-family: "Cormorant Garamond", serif; font-weight: 500; margin-bottom: 1rem; }
+.summary .line { display: flex; justify-content: space-between; padding: 0.45rem 0; font-size: 0.9rem; }
+.summary .line span:first-child { color: var(--muted); }
+.summary .grand { border-top: 1px solid var(--case-edge); margin-top: 0.7rem; padding-top: 0.9rem; font-size: 1.05rem; }
+.summary .grand span:last-child { color: var(--champagne-soft); }
+
+details.demo { margin: 1.4rem 0; color: var(--muted); font-size: 0.85rem; }
+details.demo summary { cursor: pointer; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.72rem; }
+details.demo .field { margin-top: 0.9rem; }
+
+/* ---------- result banner ---------- */
+.banner {
+  border-radius: var(--radius);
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 1.6rem;
+  font-size: 0.95rem;
+  display: none;
+}
+.banner.show { display: block; }
+.banner.success { border: 1px solid var(--success); color: var(--success); background: rgba(111, 174, 135, 0.08); }
+.banner.failure { border: 1px solid var(--danger); color: var(--danger); background: rgba(208, 101, 92, 0.08); }
+.banner ul { margin: 0.5rem 0 0 1.2rem; }
+
+/* ---------- admin ---------- */
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.admin-table th, .admin-table td {
+  text-align: left;
+  padding: 0.85rem 0.7rem;
+  border-bottom: 1px solid var(--case-edge);
+  vertical-align: top;
+}
+.admin-table th {
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.admin-table .reasons li { color: var(--danger); margin-left: 1.1rem; padding: 0.1rem 0; }
+.badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
