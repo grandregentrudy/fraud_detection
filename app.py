@@ -26,12 +26,12 @@ SELLER_COUNTRY_DEFAULT = "IN"
 # Catalogue (each item carries its seller's country for the fraud check)
 # ----------------------------------------------------------------------------
 PRODUCTS = [
-    {"id": 1, "name": "Solitaire Diamond Ring",   "price": 1450.00, "seller_country": "IN", "meta": "18k white gold · 0.9 ct"},
-    {"id": 2, "name": "Emerald Drop Earrings",    "price": 780.00,  "seller_country": "IN", "meta": "Zambian emerald · pavé halo"},
-    {"id": 3, "name": "Sapphire Tennis Bracelet", "price": 2350.00, "seller_country": "CH", "meta": "Ceylon sapphire · 7 in"},
-    {"id": 4, "name": "Baroque Pearl Strand",     "price": 540.00,  "seller_country": "JP", "meta": "Akoya pearls · 45 cm"},
-    {"id": 5, "name": "Ruby Signet Ring",         "price": 990.00,  "seller_country": "IN", "meta": "Burmese ruby · 14k gold"},
-    {"id": 6, "name": "Gold Curb Chain",          "price": 1120.00, "seller_country": "AE", "meta": "22k yellow gold · 55 g"},
+    {"id": 1, "name": "Solitaire Diamond Ring",   "price": 1450.00, "seller_country": "IN", "meta": "18k white gold · 0.9 ct", "image":"solitairediamondring.jpg"},
+    {"id": 2, "name": "Emerald Drop Earrings",    "price": 780.00,  "seller_country": "IN", "meta": "Zambian emerald · pavé halo", "image":"emeralddropearrings.jpg"},
+    {"id": 3, "name": "Sapphire Tennis Bracelet", "price": 2350.00, "seller_country": "CH", "meta": "Ceylon sapphire · 7 in", "image":"sapphiretennisbracelet.jpg"},
+    {"id": 4, "name": "Baroque Pearl Strand",     "price": 540.00,  "seller_country": "JP", "meta": "Akoya pearls · 45 cm", "image":"baroquepearlstrand.jpg"},
+    {"id": 5, "name": "Ruby Signet Ring",         "price": 990.00,  "seller_country": "IN", "meta": "Burmese ruby · 14k gold", "image":"rubysignetring.jpg"},
+    {"id": 6, "name": "Gold Curb Chain",          "price": 1120.00, "seller_country": "AE", "meta": "22k yellow gold · 55 g", "image":"goldcurbchain.jpg"},
 ]
 
 COUNTRIES = ["IN", "US", "GB", "CH", "JP", "AE", "AU", "SG"]

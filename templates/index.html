@@ -25,7 +25,9 @@
     <div class="grid">
       {% for p in products %}
       <article class="card">
-        <div class="case-frame">{{ p.name[0] }}</div>
+        <img src="{{ url_for('static', filename='images/' + p.image) }}"
+         alt="{{ p.name }}"
+         class="product-image">
         <h3>{{ p.name }}</h3>
         <p class="meta">{{ p.meta }}</p>
         <div class="row">
